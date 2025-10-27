@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AUTH</title>
+</head>
+<body>
+    <main>
+        <a href="./index.html">Auth</a>
+        <h1>AUTH - Obter um Token</h1>
+            <label for="endpoint">Request Endpoint:</label></br> 
+            <div id="endpoint"></div>
+
+            <label for="baseUrl">Base Url:</label>
+            <input type="text" id="baseUrl:" name="baseUrl" value="https://api.datora.alarislabs.com/rest/" /></br> 
+
+            <label for="requestPath">Request Path:</label>
+            <input type="text" id="requestPath:" name="requestPath" value="auth"/></br> 
+
+            <label for="user">User:</label>
+            <input type="text" id="user:" name="user" value="william@dwith.com.br"/></br> 
+
+            <label for="pass">Pass:</label>           
+            <input type="text" id="pass" name="pass" value="xtjdrdmv"/></br>
+
+            <label for="acc_id">Account ID:</label>
+            <input type="text" id="acc_id" name="acc_id" value="10289"/></br>
+
+            <label for="lifetime">Lifetime:</label>
+            <input type="text" id="lifetime" name="lifetime" value="0.083"/></br>
+
+            <label for="non_exp">Non-exp:</label>
+            <input type="text" id="non_exp" name="non_exp" value="yes"/></br>
+
+            <label for="save">Save:</label>
+            <input type="text" id="save" name="save" value="0"/></br>
+
+            <button id="authBtn">Obter Token</button>
+            
+            <p>----</p>
+
+            <label for="bodyJson">Body JSON:</label>
+            <textarea id="bodyJson" readonly></textarea>
+
+            <label for="responseJson">Response JSON:</label>
+            <textarea id="responseJson" readonly></textarea>
+
+            <label for="curlEquivalent">cURL Equivalent:</label>
+            <textarea id="curlEquivalent" readonly></textarea>
+    </main>
+
+    <script src="assets/auth.js"></script>
+</body>
+</html>
