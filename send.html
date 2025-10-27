@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SEND SMS</title>
+</head>
+<body>
+    <main>
+        <a href="./index.html">Send SMS</a>
+        <h1>SEND SMS - Enviar Mensagem</h1>
+        
+        <table>
+            <tr>
+                <td><label for="endpoint">Request Endpoint:</label></td>
+                <td><div id="endpoint"></div></td>
+            </tr>
+            <tr>
+                <td><label for="baseUrl">Base Url:</label></td>
+                <td><input type="text" id="baseUrl" name="baseUrl" value="https://api.datora.alarislabs.com/rest/"/></td>
+            </tr>
+            <tr>
+                <td><label for="requestPath">Request Path:</label></td>
+                <td><input type="text" id="requestPath" name="requestPath" value="send_sms"/></td>
+            </tr>
+            <tr>
+                <td><label for="acc_id">Account ID:</label></td>
+                <td><input type="text" id="acc_id" name="acc_id" value="10289"/></td>
+            </tr>
+            <tr>
+                <td><label for="from">From (Origem):</label></td>
+                <td><input type="text" id="from" name="from" value="12062"/></td>
+            </tr>
+            <tr>
+                <td><label for="to">To (Destino):</label></td>
+                <td><input type="text" id="to" name="to" placeholder="5521997765656" value="5521997765656"/></td>
+            </tr>
+            <tr>
+                <td><label for="message">Message:</label></td>
+                <td><textarea id="message" name="message" maxlength="450" placeholder="Digite sua mensagem (máx. 450 caracteres)"></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button id="sendBtn">Enviar SMS</button></td>
+            </tr>
+        </table>
+        
+        <p>----</p>
+        
+        <table>
+            <tr>
+                <td><strong><label for="bodyJson">Body JSON:</label></strong></td>
+                <td><textarea id="bodyJson" readonly></textarea></td>
+            </tr>
+            <tr>
+                <td><strong><label for="responseJson">Response JSON:</label></strong></td>
+                <td><textarea id="responseJson" readonly></textarea></td>
+            </tr>
+            <tr>
+                <td><strong><label for="curlEquivalent">cURL Equivalent:</label></strong></td>
+                <td><textarea id="curlEquivalent" readonly></textarea></td>
+            </tr>
+            <tr>
+                <td><strong><label for="tokenDisplay">Token:</label></strong></td>
+                <td><textarea id="tokenDisplay" readonly></textarea></td>
+            </tr>
+        </table>
+    </main>
+
+    <script src="assets/send.js"></script>
+</body>
+</html>
