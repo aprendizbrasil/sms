@@ -74,10 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Construir URL com parâmetros
+        // Construir URL apenas com os parâmetros corretos (sem user e pass)
         const params = new URLSearchParams({
-            user: user,
-            pass: pass,
             acc_id: accId,
             Lifetime: lifetime,
             'non-exp': nonExp,
@@ -86,13 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const url = `${baseUrl}${requestPath}?${params.toString()}`;
 
-        // Atualizar JSON do corpo (para GET, mostramos os parâmetros)
+        // Codificar credenciais para Basic Auth
+        const credentials = btoa(`${user}:${pass}`);
+        const authHeader = `Basic ${credentials}`;
+
+        // Atualizar JSON do corpo (para GET, mostramos os parâmetros e headers)
         const requestBody = {
             method: 'GET',
             url: url,
+            headers: {
+                'Authorization': authHeader,
+                'Accept': 'application/json'
+            },
             parameters: {
-                user: user,
-                pass: pass,
                 acc_id: accId,
                 Lifetime: lifetime,
                 'non-exp': nonExp,
@@ -101,15 +105,16 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         bodyJsonTextarea.value = JSON.stringify(requestBody, null, 2);
 
-        // Gerar comando cURL
-        const curlCommand = `curl -X GET "${url}"`;
+        // Gerar comando cURL com Basic Auth
+        const curlCommand = `curl -X GET "${url}" \\\n  -H "Authorization: ${authHeader}" \\\n  -H "Accept: application/json"`;
         curlTextarea.value = curlCommand;
 
         try {
-            // Fazer requisição GET
+            // Fazer requisição GET com Basic Auth
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
+                    'Authorization': authHeader,
                     'Accept': 'application/json'
                 }
             });

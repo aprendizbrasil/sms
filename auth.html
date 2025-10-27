@@ -9,7 +9,7 @@
     <main>
         <a href="./index.html">Auth</a>
         <h1>AUTH - Obter um Token</h1>
-            <label for="endpoint">Request Endpoint:</label></br> 
+            <label for="endpoint">Request Endpoint: </label> 
             <div id="endpoint"></div>
 
             <label for="baseUrl">Base Url:</label>
@@ -19,10 +19,10 @@
             <input type="text" id="requestPath:" name="requestPath" value="auth"/></br> 
 
             <label for="user">User:</label>
-            <input type="text" id="user:" name="user" value="william@dwith.com.br"/></br> 
+            <input type="text" id="user:" name="user" value="william@dwith.com.br" /></br> 
 
             <label for="pass">Pass:</label>           
-            <input type="text" id="pass" name="pass" value="xtjdrdmv"/></br>
+            <input type="text" id="pass" name="pass" value="xtjdrdmv" /></br>
 
             <label for="acc_id">Account ID:</label>
             <input type="text" id="acc_id" name="acc_id" value="10289"/></br>
@@ -40,14 +40,25 @@
             
             <p>----</p>
 
-            <label for="bodyJson">Body JSON:</label>
-            <textarea id="bodyJson" readonly></textarea>
+            <table>
+                <tr>
+                    <td><strong><label for="bodyJson">Body JSON:</label></strong></td>
+                    <td><textarea id="bodyJson" readonly></textarea></td>
+                </tr>
+                <tr>
+                    <td><strong><label for="responseJson">Response JSON:</label></strong></td>
+                    <td><textarea id="responseJson" readonly></textarea></td>
+                </tr>
+                <tr>
+                    <td><strong><label for="curlEquivalent">cURL Equivalent:</label></strong></td>
+                    <td><textarea id="curlEquivalent" readonly></textarea></td>
+                </tr>
+            </table>
+            
+                   
 
-            <label for="responseJson">Response JSON:</label>
-            <textarea id="responseJson" readonly></textarea>
-
-            <label for="curlEquivalent">cURL Equivalent:</label>
-            <textarea id="curlEquivalent" readonly></textarea>
+            
+            
     </main>
 
     <script src="assets/auth.js"></script>
