@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Testar Webhook Mensagem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 150px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .example {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <a href="/">Voltar para Index</a>
+        <h1>Testar Webhook Mensagem Recebida</h1>
+        
+        <div class="example">
+            <strong>Como usar:</strong><br>
+            Preencha os campos abaixo ou use um dos exemplos pré-definidos para simular o recebimento de uma mensagem SMS para o webhook.
+        </div>
+        
+        <div class="container">
+            <h2>Dados da Mensagem</h2>
+            
+            <label for="from_num">De (Número de Origem):</label>
+            <input type="text" id="from_num" name="from_num" placeholder="5521997765656" value="5521997765656">
+            
+            <label for="to_num">Para (Número de Destino):</label>
+            <input type="text" id="to_num" name="to_num" placeholder="12062" value="12062">
+            
+            <label for="message_text">Texto da Mensagem:</label>
+            <textarea id="message_text" name="message_text" placeholder="Olá, recebi sua mensagem!"></textarea>
+            
+            <label for="custom_json">JSON Personalizado (sobrescreve campos acima):</label>
+            <textarea id="custom_json" name="custom_json" placeholder=\'Cole um JSON personalizado aqui ou deixe em branco para usar os campos acima\'></textarea>
+            
+            <button onclick="sendWebhookMsg()">Enviar para Webhook</button>
+            <button onclick="loadExample()">Carregar Exemplo</button>
+        </div>
+        
+        <div class="container">
+            <h2>Resposta do Servidor</h2>
+            <div id="response" style="min-height: 50px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: white;">
+                Aguardando envio...
+            </div>
+        </div>
+        
+        <div class="container">
+            <h2>JSON que será enviado</h2>
+            <textarea id="json_preview" readonly></textarea>
+        </div>
+    </main>
+
+    <script>
+        // Exemplos pré-definidos
+        const exampleData = {
+            from: "5521997765656",
+            to: "12062",
+            text: "Olá, recebi sua mensagem de volta!",
+            timestamp: new Date().toISOString()
+        };
+
+        // Carregar exemplo
+        function loadExample() {
+            document.getElementById("from_num").value = exampleData.from;
+            document.getElementById("to_num").value = exampleData.to;
+            document.getElementById("message_text").value = exampleData.text;
+            document.getElementById("custom_json").value = ''; // Corrected empty string
+            updateJsonPreview();
+        }
+
+        // Atualizar preview do JSON
+        function updateJsonPreview() {
+            const customJson = document.getElementById("custom_json").value.trim();
+            
+            let payload;
+            if (customJson) {
+                try {
+                    payload = JSON.parse(customJson);
+                } catch (e) {
+                    document.getElementById("json_preview").value = "JSON inválido!";
+                    return;
+                }
+            } else {
+                payload = {
+                    from: document.getElementById("from_num").value,
+                    to: document.getElementById("to_num").value,
+                    text: document.getElementById("message_text").value,
+                    timestamp: new Date().toISOString()
+                };
+            }
+            
+            document.getElementById("json_preview").value = JSON.stringify(payload, null, 2);
+        }
+
+        // Enviar para webhook
+        async function sendWebhookMsg() {
+            const responseDiv = document.getElementById("response");
+            responseDiv.innerHTML = "Enviando...";
+            responseDiv.className = "";
+            
+            try {
+                const customJson = document.getElementById("custom_json").value.trim();
+                let payload;
+                
+                if (customJson) {
+                    payload = JSON.parse(customJson);
+                } else {
+                    payload = {
+                        from: document.getElementById("from_num").value,
+                        to: document.getElementById("to_num").value,
+                        text: document.getElementById("message_text").value,
+                        timestamp: new Date().toISOString()
+                    };
+                }
+                
+                const response = await fetch("/webhook_msg", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    responseDiv.innerHTML = '<span class="success">✓ Webhook recebido com sucesso!</span>'; // Corrected HTML string
+                    responseDiv.className = "success";
+                } else {
+                    responseDiv.innerHTML = `<span class="error">✗ Erro: ${response.status} - ${response.statusText}</span>`;
+                    responseDiv.className = "error";
+                }
+                
+            } catch (error) {
+                responseDiv.innerHTML = `<span class="error">✗ Erro: ${error.message}</span>`;
+                responseDiv.className = "error";
+            }
+        }
+
+        // Atualizar preview quando campos mudarem
+        document.getElementById("from_num").addEventListener("input", updateJsonPreview);
+        document.getElementById("to_num").addEventListener("input", updateJsonPreview);
+        document.getElementById("message_text").addEventListener("input", updateJsonPreview);
+        document.getElementById("custom_json").addEventListener("input", updateJsonPreview);
+
+        // Inicializar preview
+        updateJsonPreview();
+    </script>
+</body>
+</html>

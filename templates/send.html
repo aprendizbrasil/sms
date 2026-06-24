@@ -7,7 +7,7 @@
 </head>
 <body>
     <main>
-        <a href="./index.html">Index</a>
+        <a href="/">Index</a>
         <h1>SEND SMS - Enviar Mensagem</h1>
         
         <table>
@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <td><label for="baseUrl">Base Url:</label></td>
-                <td><input type="text" id="baseUrl" name="baseUrl" value="https://api.datora.alarislabs.com/rest/"/></td>
+                <td><input type="text" id="baseUrl" name="baseUrl" value="https://api.datora.alarislabs.com/rest/" style="width: 400px;"/></td>
             </tr>
             <tr>
                 <td><label for="requestPath">Request Path:</label></td>
@@ -33,11 +33,11 @@
             </tr>
             <tr>
                 <td><label for="to">To (Destino):</label></td>
-                <td><input type="text" id="to" name="to" placeholder="5521997765656" value="5521997765656"/></td>
+                <td><input type="text" id="to" name="to" placeholder="5521997765656" value="55219977656.."/></td>
             </tr>
             <tr>
                 <td><label for="message">Message:</label></td>
-                <td><textarea id="message" name="message" maxlength="450" placeholder="Digite sua mensagem (máx. 450 caracteres)"></textarea></td>
+                <td><textarea id="message" name="message" maxlength="450" placeholder="Digite sua mensagem (máx. 450 caracteres)" style="width: 400px; height: 50px;"></textarea></td>
             </tr>
             <tr>
                 <td></td>
@@ -45,24 +45,24 @@
             </tr>
         </table>
         
-        <p>----</p>
+
         
         <table>
             <tr>
-                <td><strong><label for="bodyJson">Body JSON:</label></strong></td>
-                <td><textarea id="bodyJson" readonly></textarea></td>
-            </tr>
-            <tr>
                 <td><strong><label for="responseJson">Response JSON:</label></strong></td>
-                <td><textarea id="responseJson" readonly></textarea></td>
+                <td><textarea id="responseJson" readonly style="width: 600px; height: 100px;"></textarea></td>
             </tr>
             <tr>
                 <td><strong><label for="curlEquivalent">cURL Equivalent:</label></strong></td>
-                <td><textarea id="curlEquivalent" readonly></textarea></td>
+                <td><textarea id="curlEquivalent" readonly style="width: 600px; height: 150px;"></textarea></td>
+            </tr>
+            <tr>
+                <td><strong><label for="bodyJson">Body JSON:</label></strong></td>
+                <td><textarea id="bodyJson" readonly style="width: 600px; height: 150px;"></textarea></td>
             </tr>
             <tr>
                 <td><strong><label for="tokenDisplay">Token:</label></strong></td>
-                <td><textarea id="tokenDisplay" readonly></textarea></td>
+                <td><textarea id="tokenDisplay" readonly style="width: 600px; height: 50px;"></textarea></td>
             </tr>
         </table>
     </main>

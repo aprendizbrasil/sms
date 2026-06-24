@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Webhook Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        .history-section { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .history-section h1 { color: #333; text-align: left; }
+        .history-section ul { list-style: none; padding: 0; }
+        .history-section li { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; }
+        .history-section li pre { background: white; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px; }
+        .clear-buttons button { margin-right: 10px; }
+    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SMS</title>
+</head>
+
+<body>
+    <main>
+        <h1>SMS ARQIA</h1>
+        <nav>
+            <ul>
+                <li><a href="./auth.html" target="_blank">Auth</a></li>
+                <li><a href="./send.html" target="_blank">Send</a></li>
+                <li><a href="./testStatus-wh.html" target="_blank">Testar Webhook Status</a></li>
+                <li><a href="./testMsg-wh.html" target="_blank">Testar Webhook Mensagem</a></li>
+                <li><a href="./getFileName.html" target="_blank">Query EDR - Nome Arquivo</a></li>
+            </ul>
+        </nav>
+    </main>
+
+===============================</br>
+
+    <div class="clear-buttons" style="margin-bottom: 20px;">
+        <button onclick="clearHistory('status')" style="padding: 8px 16px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Limpar Histórico de Status
+        </button>
+        <span id="statusHistoryCount" style="margin-left: 15px; font-weight: bold;"></span>
+        
+        <button onclick="clearHistory('msg')" style="padding: 8px 16px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Limpar Histórico de Mensagens
+        </button>
+        <span id="msgHistoryCount" style="margin-left: 15px; font-weight: bold;"></span>
+
+        <a href="/download_history" target="_blank" style="display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">
+            Baixar historico.log
+        </a>
+    </div>
+
+    <div class="history-section">
+        <h2>Histórico de Status de SMS</h2>
+        <div id="statusPayloadList">
+            <p>Carregando histórico de status...</p>
+        </div>
+    </div>
+
+    <div class="history-section">
+        <h2>Histórico de Mensagens Recebidas</h2>
+        <div id="msgPayloadList">
+            <p>Carregando histórico de mensagens...</p>
+        </div>
+    </div>
+
+    <script>
+        async function carregarJSON() {
+            try {
+                // Carregar histórico de status
+                const statusRes = await fetch("/data/status");
+                const statusData = await statusRes.json();
+                
+                document.getElementById("statusHistoryCount").textContent = 
+                    `${statusData.length} payload(s) de status recebido(s)`;
+                displayPayloads(statusData, "statusPayloadList", "status");
+
+                // Carregar histórico de mensagens
+                const msgRes = await fetch("/data/msg");
+                const msgData = await msgRes.json();
+
+                document.getElementById("msgHistoryCount").textContent = 
+                    `${msgData.length} payload(s) de mensagem recebido(s)`;
+                displayPayloads(msgData, "msgPayloadList", "msg");
+                
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+                document.getElementById("statusPayloadList").innerHTML = 
+                    "<p style=\"color: red;\">Erro ao carregar histórico de status</p>";
+                document.getElementById("msgPayloadList").innerHTML = 
+                    "<p style=\"color: red;\">Erro ao carregar histórico de mensagens</p>";
+            }
+        }
+
+        function displayPayloads(data, elementId, type) {
+            const payloadList = document.getElementById(elementId);
+            
+            if (data.length === 0) {
+                payloadList.innerHTML = `<p>Nenhum webhook de ${type === 'status' ? 'status' : 'mensagem'} recebido ainda.</p>`;
+                return;
+            }
+            
+            let html = 
+                `<ul style="list-style: none; padding: 0;">`;
+            
+            // Exibir do mais recente para o mais antigo
+            data.reverse().forEach((item, index) => {
+                const timestamp = new Date(item.timestamp).toLocaleString("pt-BR");
+                const payload = JSON.stringify(item.data, null, 2);
+                
+                html += `
+                    <li style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9;">
+                        <div style="margin-bottom: 10px;">
+                            <strong>#${data.length - index}</strong> - 
+                            <span style="color: #666;">${timestamp}</span>
+                        </div>
+                        <pre style="background: white; padding: 10px; border-radius: 3px; overflow-x: auto; font-size: 12px;">${payload}</pre>
+                    </li>
+                `;
+            });
+            
+            html += "</ul>";
+            payloadList.innerHTML = html;
+        }
+
+        async function clearHistory(type) {
+            if (confirm(`Tem certeza que deseja limpar o histórico de ${type === 'status' ? 'status' : 'mensagens'}?`)) {
+                try {
+                    await fetch(`/clear?type=${type}`, { method: 'POST' });
+                    carregarJSON(); // Recarregar a lista vazia
+                } catch (error) {
+                    alert(`Erro ao limpar histórico de ${type === 'status' ? 'status' : 'mensagens'}`);
+                }
+            }
+        }
+
+        // Atualizar a cada 3 segundos
+        setInterval(carregarJSON, 3000);
+        carregarJSON();
+    </script>
+
+</body>
+</html>

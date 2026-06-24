@@ -101,6 +101,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // Atualizar exibição do token
         tokenDisplay.value = token;
 
+        // Helper function to log send action to the backend
+        async function _logSendSmsAction(status, errorMessage = null) {
+            const sendLogPayload = {
+                "Request Path": requestPath,
+                "acc_id": parseInt(accId),
+                "from": from,
+                "to": to,
+                "message": message,
+            };
+
+            if (errorMessage) {
+                sendLogPayload.erro = errorMessage;
+            }
+
+            fetch('/log_send_sms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(sendLogPayload)
+            }).then(logResponse => {
+                if (!logResponse.ok) {
+                    console.error('Erro ao registrar envio no log (backend):', logResponse.statusText);
+                }
+            }).catch(logError => {
+                console.error('Erro ao registrar envio no log (backend):', logError);
+            });
+        }
+
         try {
             console.log('Enviando requisição GET para:', url);
             console.log('Parâmetros:', requestInfo.parameters);
@@ -134,14 +163,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.message_id) {
                 alert('SMS enviado com sucesso! ID: ' + data.message_id);
+                // Log successful send action
+                _logSendSmsAction("SUCESSO");
             } else {
                 alert('SMS enviado, mas sem ID de mensagem na resposta');
+                // Log send action even if message_id is missing, as it might still be considered a send
+                _logSendSmsAction("ALERTA: Sem Message ID");
             }
 
         } catch (error) {
             console.error('Erro na requisição:', error);
             responseJsonTextarea.value = `Erro: ${error.message}`;
             alert('Erro ao enviar SMS: ' + error.message);
+            // Log failed send action
+            _logSendSmsAction("FALHA", error.message);
         }
     }
 

@@ -1,0 +1,29 @@
+#1 - 23/06/2026, 22:33:50 - Envio de SMS
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "12062",
+  "to": "5521997765656",
+  "message": "Teste 6 "
+}
+
+#2 - 23/06/2026, 22:34:13 - Envio de SMS - FALHOU
+{
+  "Request Path": "send_sms",
+  "acc_id": 10280,
+  "from": "12062",
+  "to": "5521997765656",
+  "message": "Teste 7 ",
+  "erro": "Erro HTTP: 403 - {\"error_message\":\"Account ID:10280 of Carrier ID: 257 not corresponding with token Carrier ID: 266\"}"
+}
+
+#3 - 23/06/2026, 22:34:46 - Envio de SMS - FALHOU
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "15062",
+  "to": "5521997765656",
+  "message": "Teste 7 ",
+  "erro": "Erro HTTP: 400 - {\"error_message\":\"NO ROUTES\\n\"}"
+}
+
