@@ -174,4 +174,4 @@ def serve_assets(filename):
     return send_from_directory("assets", filename)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=7600)

@@ -1,2 +1,10 @@
+# PASTAS
+__pycache__/
+.well-known/
+.venv/
+
+# ARQUIVOS
+.env
 .settings.json
 API-Endpoints.txt
+historico.log
