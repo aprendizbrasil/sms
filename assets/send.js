@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tokenDisplay.value = token;
 
         // Helper function to log send action to the backend
-        async function _logSendSmsAction(status, errorMessage = null) {
+        async function _logSendSmsAction(status, errorMessage = null, successResponseData = null) {
             const sendLogPayload = {
                 "Request Path": requestPath,
                 "acc_id": parseInt(accId),
@@ -113,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (errorMessage) {
                 sendLogPayload.erro = errorMessage;
+            }
+            if (successResponseData) {
+                sendLogPayload.response = successResponseData;
             }
 
             fetch('/log_send_sms', {
@@ -163,12 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.message_id) {
                 alert('SMS enviado com sucesso! ID: ' + data.message_id);
-                // Log successful send action
-                _logSendSmsAction("SUCESSO");
+                // Log successful send action with response data
+                _logSendSmsAction("SUCESSO", null, data);
             } else {
                 alert('SMS enviado, mas sem ID de mensagem na resposta');
                 // Log send action even if message_id is missing, as it might still be considered a send
-                _logSendSmsAction("ALERTA: Sem Message ID");
+                _logSendSmsAction("ALERTA: Sem Message ID", null, data);
             }
 
         } catch (error) {

@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, render_template, send_from_directory
 from datetime import datetime
 import json
 import os
+from dotenv import load_dotenv
+
+load_dotenv() # Carrega as variáveis de ambiente do .env
 
 app = Flask(__name__)
 
@@ -16,7 +19,7 @@ send_log_counter = 0
 
 LOG_FILE = "historico.log"
 
-def _append_to_log(log_type, payload_data, error_message=None):
+def _append_to_log(log_type, received_payload, error_message=None, response_data=None):
     global status_log_counter, message_log_counter, send_log_counter
     
     current_timestamp = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
@@ -34,10 +37,19 @@ def _append_to_log(log_type, payload_data, error_message=None):
         log_index = send_log_counter
         if error_message:
             log_label_suffix = " - FALHOU"
+        elif response_data:
+            log_label_suffix = " - OK"
+
+    # Create a copy of the received_payload to modify for logging
+    payload_to_log = received_payload.copy()
+    if error_message:
+        payload_to_log["erro"] = error_message
+    if response_data:
+        payload_to_log["response"] = response_data
 
     log_entry = (
         f"#{log_index} - {current_timestamp} - {log_type}{log_label_suffix}\n"
-        f"{json.dumps(payload_data, indent=2)}\n\n"
+        f"{json.dumps(payload_to_log, indent=2)}\n\n"
     )
 
     try:
@@ -48,10 +60,17 @@ def _append_to_log(log_type, payload_data, error_message=None):
         print(f"Erro ao escrever no arquivo de log {LOG_FILE}: {e}")
 
 
-@app.route("/webhook_status", methods=["POST"])
+@app.route("/webhook_status", methods=["GET", "POST"])
 def webhook_status():
     try:
-        payload = request.get_json(force=True)
+        full_url = request.url
+        if request.method == "POST":
+            payload = request.get_json(force=True)
+        else: # GET request
+            payload = request.args.to_dict()
+        
+        # Adicionar a URL completa ao payload para exibição na interface e log
+        payload["request_url"] = full_url
         
         # Adicionar timestamp ao payload em memória
         payload_with_timestamp = {
@@ -64,8 +83,8 @@ def webhook_status():
         if len(webhook_status_history) > 50:
             webhook_status_history.pop(0)
 
-        # Adicionar ao log persistente
-        _append_to_log("Status", payload_with_timestamp["data"]) # Log the original payload data
+        # Adicionar ao log persistente (agora com o payload completo)
+        _append_to_log("Status", payload) 
         
         print(f"JSON de Status recebido ({len(webhook_status_history)}):", payload)
         return "Status recebido com sucesso!", 200
@@ -74,11 +93,18 @@ def webhook_status():
         print(f"Erro ao processar webhook de status: {e}")
         return "Erro ao processar JSON de status", 400
 
-@app.route("/webhook_msg", methods=["POST"])
+@app.route("/webhook_msg", methods=["GET", "POST"])
 def webhook_msg():
     try:
-        payload = request.get_json(force=True)
+        full_url = request.url
+        if request.method == "POST":
+            payload = request.get_json(force=True)
+        else: # GET request
+            payload = request.args.to_dict()
         
+        # Adicionar a URL completa ao payload para exibição na interface e log
+        payload["request_url"] = full_url
+
         # Adicionar timestamp ao payload em memória
         payload_with_timestamp = {
             "timestamp": datetime.now().isoformat(),
@@ -90,8 +116,8 @@ def webhook_msg():
         if len(webhook_message_history) > 50:
             webhook_message_history.pop(0)
 
-        # Adicionar ao log persistente
-        _append_to_log("Mensagem", payload_with_timestamp["data"]) # Log the original payload data
+        # Adicionar ao log persistente (agora com o payload completo)
+        _append_to_log("Mensagem", payload) 
         
         print(f"JSON de Mensagem recebida ({len(webhook_message_history)}):", payload)
         return "Mensagem recebida com sucesso!", 200
@@ -105,7 +131,11 @@ def log_send_sms():
     try:
         payload = request.get_json(force=True)
         error_message = payload.get("erro") # Get error message if present
-        _append_to_log("Envio de SMS", payload, error_message)
+        response_data = payload.get("response") # Get response data if present
+        
+        # The payload from JS already contains Request Path, acc_id, from, to, message
+        # and potentially 'erro' or 'response'. Pass it directly.
+        _append_to_log("Envio de SMS", payload, error_message, response_data)
         print(f"Log de Envio de SMS recebido: {payload}")
         return "Log de envio registrado com sucesso!", 200
     except Exception as e:
@@ -143,7 +173,10 @@ def index():
 
 @app.route("/auth.html")
 def auth():
-    return render_template("auth.html")
+    auth_user = os.getenv("AUTH_USER")
+    auth_pass = os.getenv("AUTH_PASS")
+    auth_acc_id = os.getenv("AUTH_ACC_ID")
+    return render_template("auth.html", user=auth_user, password=auth_pass, acc_id=auth_acc_id)
 
 @app.route("/send.html")
 def send():

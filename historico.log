@@ -27,3 +27,188 @@
   "erro": "Erro HTTP: 400 - {\"error_message\":\"NO ROUTES\\n\"}"
 }
 
+#1 - 02/07/2026, 11:23:24 - Envio de SMS - OK
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "12062",
+  "to": "5521997765656",
+  "message": "Teste do Prot\u00f3tipo para Cel William 01",
+  "response": {
+    "message_id": "5dfdf1c65b",
+    "message_text": "VGVzdGUgZG8gUHJvdMOzdGlwbyBwYXJhIENlbCBXaWxsaWFtIDAx"
+  }
+}
+
+#1 - 02/07/2026, 11:57:54 - Envio de SMS - OK
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "12062",
+  "to": "5521997765656",
+  "message": "Teste 11:57 do rototipo para Cel William",
+  "response": {
+    "message_id": "8959ce1ca1",
+    "message_text": "VGVzdGUgMTE6NTcgZG8gcm90b3RpcG8gcGFyYSBDZWwgV2lsbGlhbQ=="
+  }
+}
+
+#1 - 02/07/2026, 11:58:52 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status?message_id=test_get_status_456&status=received&timestamp=2026-07-02T11:40:00Z&recipient=5521999999999"
+}
+
+#1 - 02/07/2026, 12:04:15 - Mensagem
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": "5521888888888",
+  "to": "12062",
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_msg?from=5521888888888&to=12062&text=Mensagem%20de%20teste%20GET&timestamp=2026-07-02T11:41:00Z"
+}
+
+#2 - 02/07/2026, 12:05:08 - Mensagem
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": "5521888889999",
+  "to": "12062",
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_msg?from=5521888889999&to=12062&text=Mensagem%20de%20teste%20GET&timestamp=2026-07-02T11:41:00Z"
+}
+
+#2 - 02/07/2026, 12:07:22 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status"
+}
+
+#1 - 02/07/2026, 12:42:50 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status?message_id=test_get_status_456&status=received&timestamp=2026-07-02T11:40:00Z&recipient=5521999999999"
+}
+
+#2 - 02/07/2026, 12:43:32 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status?message_id=test_get_status_456&status=received&timestamp=2026-07-02T11:40:00Z&recipient=5521999999999"
+}
+
+#3 - 02/07/2026, 12:44:11 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status?msg-id=c4dff2edbf&state=DELIVRD"
+}
+
+#1 - 02/07/2026, 12:46:10 - Mensagem
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": "Resposta",
+  "request_url": "http://127.0.0.1:7600/webhook_msg?dnis=18998&ani=5551976017941&command=mo&message=Resposta"
+}
+
+#4 - 02/07/2026, 13:03:44 - Status
+{
+  "Request Path": null,
+  "acc_id": null,
+  "from": null,
+  "to": null,
+  "message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status"
+}
+
+#1 - 02/07/2026, 13:16:09 - Status
+{
+  "msg-id": "c4dff2edbf",
+  "state": "DELIVRD",
+  "request_url": "http://127.0.0.1:7600/webhook_status?msg-id=c4dff2edbf&state=DELIVRD"
+}
+
+#1 - 02/07/2026, 13:16:23 - Mensagem
+{
+  "dnis": "18998",
+  "ani": "5551976017941",
+  "command": "mo",
+  "message": "Resposta",
+  "request_url": "http://127.0.0.1:7600/webhook_msg?dnis=18998&ani=5551976017941&command=mo&message=Resposta"
+}
+
+#2 - 02/07/2026, 13:17:24 - Status
+{
+  "message_id": "c8d1e2f3g4h5i6j7",
+  "status": "sent",
+  "recipient": "5521997765656",
+  "timestamp": "2026-07-02T16:17:24.142Z",
+  "error_code": null,
+  "error_message": null,
+  "request_url": "http://127.0.0.1:7600/webhook_status"
+}
+
+#2 - 02/07/2026, 13:19:42 - Mensagem
+{
+  "from": "5521997765656",
+  "to": "12062",
+  "text": "Ol\u00e1, recebi sua mensagem de volta!",
+  "timestamp": "2026-07-02T16:19:42.378Z",
+  "request_url": "http://127.0.0.1:7600/webhook_msg"
+}
+
+#1 - 02/07/2026, 13:21:54 - Envio de SMS - OK
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "12062",
+  "to": "5521997765656",
+  "message": "Teste William 13h21",
+  "response": {
+    "message_id": "cbf1c3ad68",
+    "message_text": "VGVzdGUgV2lsbGlhbSAxM2gyMQ=="
+  }
+}
+
+#2 - 02/07/2026, 13:24:15 - Envio de SMS - FALHOU
+{
+  "Request Path": "send_sms",
+  "acc_id": 10289,
+  "from": "12062",
+  "to": "55219977656",
+  "message": "Teste William 13h23  com numero cel (to) incompleto",
+  "erro": "Erro HTTP: 400 - {\"error_message\":\"NO ROUTES\\n\"}"
+}
+
+#3 - 02/07/2026, 13:25:12 - Envio de SMS - FALHOU
+{
+  "Request Path": "send_sms",
+  "acc_id": 10281,
+  "from": "12062",
+  "to": "55219977656",
+  "message": "Teste William 13h25  com Account ID errado",
+  "erro": "Erro HTTP: 403 - {\"error_message\":\"Account ID:10281 of Carrier ID: 258 not corresponding with token Carrier ID: 266\"}"
+}
+
